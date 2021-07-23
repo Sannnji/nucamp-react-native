@@ -8,6 +8,7 @@ import Constants from "expo-constants";
 import Directory from "./Directory";
 import CampsiteInfo from "./CampsiteInfo";
 import Home from "./Home";
+import Contact from "./Contact";
 
 const DirectoryNavigator = createStackNavigator();
 
@@ -34,6 +35,7 @@ const MyDrawer = () => {
     <Drawer.Navigator drawerStyle={{ backgroundColor: "#CEC8FF" }}>
       <Drawer.Screen name="MyStack" component={MyStack} />
       <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="Contact" component={Contact} />
     </Drawer.Navigator>
   );
 };
