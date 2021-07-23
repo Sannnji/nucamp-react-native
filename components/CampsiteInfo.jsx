@@ -17,7 +17,7 @@ function RenderCampsite({ campsite }) {
   return <View />;
 }
 
-function CampsiteInfo(props) {
+function CampsiteInfo({route}) {
   const [data, setData] = useState({
     campsites: CAMPSITES,
     selectedCampsite: null,
@@ -27,7 +27,8 @@ function CampsiteInfo(props) {
     title: "Campsite Information",
   };
 
-  const campsiteId = props.navigation.getParam("campsiteId");
+
+  const { campsiteId } = route.params;
   const campsite = data.campsites.filter(
     (campsite) => campsite.id === campsiteId
   )[0];
