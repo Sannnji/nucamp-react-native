@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { FlatList } from "react-native";
 import { ListItem, Avatar } from "react-native-elements";
 
+import { CAMPSITES } from "../shared/campsites";
+
 function Directory(props) {
-  
+  const [data, setData] = useState({
+    campsites: CAMPSITES,
+    selectedCampsite: null,
+  });
+
+  const navigationOptions = {
+    title: "Directory",
+  };
+
+  const { navigate } = props.navigation;
   const renderDirectoryItem = ({ item }) => {
     return (
-      <ListItem bottomDivider onPress={() => props.onPress(item.id)}>
+      <ListItem
+        bottomDivider
+        onPress={() => navigate("CampsiteInfo", { campsiteId: item.id })}
+      >
         <Avatar rounded source={require("../assets/images/react-lake.jpg")} />
         <ListItem.Content>
           <ListItem.Title>{item.name}</ListItem.Title>
@@ -19,7 +33,7 @@ function Directory(props) {
 
   return (
     <FlatList
-      data={props.campsites}
+      data={data.campsites}
       renderItem={renderDirectoryItem}
       keyExtractor={(item) => item.id.toString()}
     />
