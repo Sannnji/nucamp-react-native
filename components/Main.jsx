@@ -9,6 +9,7 @@ import Directory from "./Directory";
 import CampsiteInfo from "./CampsiteInfo";
 import Home from "./Home";
 import Contact from "./Contact";
+import About from "./About";
 
 const DirectoryNavigator = createStackNavigator();
 
@@ -20,10 +21,17 @@ const MyStack = () => {
         component={Directory}
         options={{
           headerTintColor: "white",
-          headerStyle: { backgroundColor: "tomato" },
+          headerStyle: { backgroundColor: "#301B3F" },
         }}
       />
-      <DirectoryNavigator.Screen name="CampsiteInfo" component={CampsiteInfo} />
+      <DirectoryNavigator.Screen
+        name="CampsiteInfo"
+        component={CampsiteInfo}
+        options={{
+          headerTintColor: "white",
+          headerStyle: { backgroundColor: "#301B3F" },
+        }}
+      />
     </DirectoryNavigator.Navigator>
   );
 };
@@ -33,9 +41,26 @@ const Drawer = createDrawerNavigator();
 const MyDrawer = () => {
   return (
     <Drawer.Navigator drawerStyle={{ backgroundColor: "#CEC8FF" }}>
-      <Drawer.Screen name="MyStack" component={MyStack} />
-      <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="Contact" component={Contact} />
+      <Drawer.Screen
+        name="MyStack"
+        component={MyStack}
+        options={{ headerShown: true }}
+      />
+      <Drawer.Screen
+        name="Home"
+        component={Home}
+        options={{ headerShown: true, headerTitle: "Home" }}
+      />
+      <Drawer.Screen
+        name="Contact"
+        component={Contact}
+        options={{ headerShown: true, headerTitle: "Contact" }}
+      />
+      <Drawer.Screen
+        name="About"
+        component={About}
+        options={{ headerShown: true, headerTitle: "About" }}
+      />
     </Drawer.Navigator>
   );
 };
