@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Platform, SafeAreaView } from "react-native";
+import React from "react";
+import { View, Platform } from "react-native";
 import { Icon, Image, Text } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
