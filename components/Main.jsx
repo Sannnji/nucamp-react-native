@@ -20,8 +20,7 @@ const MyStack = () => {
         name="Directory"
         component={Directory}
         options={{
-          headerTintColor: "white",
-          headerStyle: { backgroundColor: "#301B3F" },
+          headerShown: false,
         }}
       />
       <DirectoryNavigator.Screen
@@ -42,14 +41,14 @@ const MyDrawer = () => {
   return (
     <Drawer.Navigator drawerStyle={{ backgroundColor: "#CEC8FF" }}>
       <Drawer.Screen
-        name="MyStack"
-        component={MyStack}
-        options={{ headerShown: true }}
-      />
-      <Drawer.Screen
         name="Home"
         component={Home}
         options={{ headerShown: true, headerTitle: "Home" }}
+      />
+      <Drawer.Screen
+        name="Directory"
+        component={MyStack}
+        options={{ headerShown: true }}
       />
       <Drawer.Screen
         name="Contact"
