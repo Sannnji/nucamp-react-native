@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Platform } from "react-native";
+import React, { useEffect } from "react";
+import { View, Platform, StyleSheet } from "react-native";
 import { Icon, Image, Text } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -9,13 +9,13 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 import Constants from "expo-constants";
+import { connect } from "react-redux";
 
 import Directory from "./Directory";
 import CampsiteInfo from "./CampsiteInfo";
 import Home from "./Home";
 import Contact from "./Contact";
 import About from "./About";
-import { StyleSheet } from "react-native";
 
 const DirectoryNavigator = createStackNavigator();
 

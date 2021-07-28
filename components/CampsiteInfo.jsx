@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, FlatList } from "react-native";
 import { Card, Icon } from "react-native-elements";
 
-import { CAMPSITES } from "../shared/campsites";
-import { COMMENTS } from "../shared/comments";
+import { useDispatch, useSelector } from "react-redux";
+
+import { getCampsites } from "../redux/features/campsites/campsitesSlice";
+import { getComments } from "../redux/features/comments/commentsSlice";
 
 function RenderCampsite(props) {
-
   if (props.campsite) {
     return (
       <Card>
@@ -56,26 +57,32 @@ function RenderComments({ comments }) {
 }
 
 function CampsiteInfo({ route }) {
+  const dispatch = useDispatch();
+
+  const { comments } = useSelector((state) => state.comments);
+  const { campsites } = useSelector((state) => state.campsites);
+
+  useEffect(() => {
+    dispatch(getComments());
+    dispatch(getCampsites());
+  });
+
   const [data, setData] = useState({
-    campsites: CAMPSITES,
-    comments: COMMENTS,
     favorite: false,
   });
 
   function markFavorite() {
     setData({
-      campsites: CAMPSITES,
-      comments: COMMENTS,
       favorite: true,
     });
   }
 
   const { campsiteId } = route.params;
-  const campsite = data.campsites.filter(
+  const campsite = campsites.filter(
     (campsite) => campsite.id === campsiteId
   )[0];
 
-  const comments = data.comments.filter(
+  const comment = comments.filter(
     (comment) => comment.campsiteId === campsiteId
   );
 
@@ -86,7 +93,7 @@ function CampsiteInfo({ route }) {
         favorite={data.favorite}
         markFavorite={() => markFavorite()}
       />
-      <RenderComments comments={comments} />
+      <RenderComments comments={comment} />
     </ScrollView>
   );
 }

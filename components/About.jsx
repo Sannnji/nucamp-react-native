@@ -1,8 +1,11 @@
-import React, { useState } from "react";
-import { SectionList } from "react-native";
-import { ScrollView, FlatList, View } from "react-native";
+import React, { useEffect } from "react";
+import { ScrollView, FlatList } from "react-native";
 import { Text, Card, ListItem, Avatar } from "react-native-elements";
-import { PARTNERS } from "../shared/partners";
+
+import { useSelector, useDispatch } from "react-redux";
+
+import { getPartners } from "../redux/features/partners/partnersSlice";
+import { baseUrl } from "../shared/baseUrl";
 
 const Mission = () => {
   return (
@@ -25,7 +28,7 @@ const Mission = () => {
 const renderPartners = ({ item }) => {
   return (
     <ListItem>
-      <Avatar rounded source={require("../assets/images/bootstrap-logo.png")} />
+      <Avatar rounded source={{ uri: baseUrl + item.image }} />
       <ListItem.Content>
         <ListItem.Title>{item.name}</ListItem.Title>
         <ListItem.Subtitle>{item.description}</ListItem.Subtitle>
@@ -34,9 +37,12 @@ const renderPartners = ({ item }) => {
   );
 };
 
-const About = () => {
-  const [data, useData] = useState({
-    partners: PARTNERS,
+const About = (props) => {
+  const dispatch = useDispatch();
+  const { partners } = useSelector((state) => state.partners);
+
+  useEffect(() => {
+    dispatch(getPartners());
   });
 
   return (
@@ -46,7 +52,7 @@ const About = () => {
         <Card.Title>Community Partners</Card.Title>
         <Card.Divider />
         <FlatList
-          data={data.partners}
+          data={partners}
           renderItem={renderPartners}
           keyExtractor={(item) => item.id.toString()}
         />

@@ -1,18 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FlatList } from "react-native";
 import { ListItem, Avatar } from "react-native-elements";
 
-import { CAMPSITES } from "../shared/campsites";
+import { useSelector, useDispatch } from "react-redux";
+
+import { getCampsites } from "../redux/features/campsites/campsitesSlice";
 
 function Directory(props) {
-  const [data, setData] = useState({
-    campsites: CAMPSITES,
-    selectedCampsite: null,
+  const dispatch = useDispatch();
+  const { campsites } = useSelector((state) => state.campsites);
+
+  useEffect(() => {
+    dispatch(getCampsites());
   });
 
-  const navigationOptions = {
-    title: "Directory",
-  };
+  const [data, setData] = useState({
+    selectedCampsite: null,
+  });
 
   const { navigate } = props.navigation;
   const renderDirectoryItem = ({ item }) => {
@@ -33,7 +37,7 @@ function Directory(props) {
 
   return (
     <FlatList
-      data={data.campsites}
+      data={campsites}
       renderItem={renderDirectoryItem}
       keyExtractor={(item) => item.id.toString()}
     />
