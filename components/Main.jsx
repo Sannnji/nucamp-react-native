@@ -9,13 +9,13 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 import Constants from "expo-constants";
-import { connect } from "react-redux";
 
 import Directory from "./Directory";
 import CampsiteInfo from "./CampsiteInfo";
 import Home from "./Home";
 import Contact from "./Contact";
 import About from "./About";
+import Example from "./ReservationForm";
 
 const DirectoryNavigator = createStackNavigator();
 
@@ -91,6 +91,20 @@ const MyDrawer = () => {
           drawerIcon: () => (
             <Icon
               name="list"
+              type="font-awesome"
+              iconStyle={styles.drawerIcon}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Reservation"
+        component={Example}
+        options={{
+          headerShown: true,
+          drawerIcon: () => (
+            <Icon
+              name="tree"
               type="font-awesome"
               iconStyle={styles.drawerIcon}
             />
