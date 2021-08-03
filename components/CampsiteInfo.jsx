@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, FlatList } from "react-native";
-import { Card, Icon } from "react-native-elements";
+import { View, Text, ScrollView, FlatList, StyleSheet } from "react-native";
+import { Card, Icon, Rating } from "react-native-elements";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import { getCampsites } from "../redux/features/campsites/campsitesSlice";
 import { getComments } from "../redux/features/comments/commentsSlice";
+import ReviewForm from "./ReviewForm";
 
 function RenderCampsite(props) {
   if (props.campsite) {
@@ -14,18 +15,21 @@ function RenderCampsite(props) {
         <Card.Image source={require("../assets/images/react-lake.jpg")} />
         <Card.Title>{props.campsite.name}</Card.Title>
         <Text style={{ margin: 10 }}>{props.campsite.description}</Text>
-        <Icon
-          name={props.favorite ? "heart" : "heart-o"}
-          type="font-awesome"
-          color="#F50"
-          raised
-          reverse
-          onPress={() =>
-            props.favorite
-              ? console.log("Already set as favorite")
-              : props.markFavorite()
-          }
-        />
+        <View style={styles.buttonRow}>
+          <Icon
+            name={props.favorite ? "heart" : "heart-o"}
+            type="font-awesome"
+            color="#F50"
+            raised
+            reverse
+            onPress={() =>
+              props.favorite
+                ? console.log("Already set as favorite")
+                : props.markFavorite()
+            }
+          />
+          <ReviewForm selectedCampsite={props.campsite.id} />
+        </View>
       </Card>
     );
   }
@@ -37,7 +41,12 @@ function RenderComments({ comments }) {
     return (
       <View style={{ margin: 10 }}>
         <Text style={{ fontSize: 14 }}>{item.text}</Text>
-        <Text style={{ fontSize: 12 }}>{item.rating} Stars</Text>
+        <Rating
+          style={{ alignItems: "left", marginTop: 10, marginBottom: 10 }}
+          readOnly
+          imageSize={10}
+          startingValue={item.rating}
+        />
         <Text
           style={{ fontSize: 12 }}
         >{`-- ${item.author}, ${item.date}`}</Text>
@@ -65,7 +74,7 @@ function CampsiteInfo({ route }) {
   useEffect(() => {
     dispatch(getComments());
     dispatch(getCampsites());
-  });
+  }, [dispatch]);
 
   const [data, setData] = useState({
     favorite: false,
@@ -99,3 +108,13 @@ function CampsiteInfo({ route }) {
 }
 
 export default CampsiteInfo;
+
+const styles = StyleSheet.create({
+  buttonRow: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    flexDirection: "row",
+    margin: 20,
+  },
+});

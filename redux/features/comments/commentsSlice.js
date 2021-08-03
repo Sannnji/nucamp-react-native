@@ -3,8 +3,34 @@ import { baseUrl } from "../../../shared/baseUrl";
 
 export const getComments = createAsyncThunk(
   "comments/getComments",
-  async (dispatch, getState) => {
-    return await fetch(baseUrl + "comments").then((res) => res.json());
+  async () => {
+    const response = await fetch(baseUrl + "comments");
+    if (response.ok) {
+      const comments = await response.json();
+      return { comments };
+    }
+  }
+);
+
+export const addComment = createAsyncThunk(
+  "comments/addComment",
+  async (payload) => {
+    const response = await fetch(baseUrl + "comments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        campsiteId: payload.campsiteId,
+        rating: payload.rating,
+        author: payload.author,
+        text: payload.text,
+        date: payload.date,
+      }),
+    });
+    if (response.ok) {
+      const comment = await response.json();
+      console.log(comment);
+      return { comment };
+    }
   }
 );
 
@@ -20,10 +46,13 @@ const commentsSlice = createSlice({
     },
     [getComments.fulfilled]: (state, action) => {
       state.status = "Success";
-      state.comments = action.payload;
+      state.comments = action.payload.comments;
     },
     [getComments.rejected]: (state, action) => {
       state.status = "Error";
+    },
+    [addComment.fulfilled]: (state, action) => {
+      state.comments.push(action.payload.comment);
     },
   },
 });
