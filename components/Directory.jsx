@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { FlatList } from "react-native";
+import { FlatList, StatusBar } from "react-native";
 import { ListItem, Avatar } from "react-native-elements";
 
 import { useSelector, useDispatch } from "react-redux";
 
+import { baseUrl } from "../shared/baseUrl";
 import { getCampsites } from "../redux/features/campsites/campsitesSlice";
+import { Tile } from "react-native-elements/dist/tile/Tile";
+import { SafeAreaView } from "react-native";
 
 function Directory(props) {
   const dispatch = useDispatch();
@@ -21,26 +24,25 @@ function Directory(props) {
   const { navigate } = props.navigation;
   const renderDirectoryItem = ({ item }) => {
     return (
-      <ListItem
-        bottomDivider
+      <Tile
+        featured
+        imageSrc={{ uri: baseUrl + item.image }}
+        title={item.name}
+        caption={item.description}
         onPress={() => navigate("CampsiteInfo", { campsiteId: item.id })}
-      >
-        <Avatar rounded source={require("../assets/images/react-lake.jpg")} />
-        <ListItem.Content>
-          <ListItem.Title>{item.name}</ListItem.Title>
-          <ListItem.Subtitle>{item.description}</ListItem.Subtitle>
-        </ListItem.Content>
-        <ListItem.Chevron />
-      </ListItem>
+        containerStyle={{ marginTop: 20 }}
+      />
     );
   };
 
   return (
-    <FlatList
-      data={campsites}
-      renderItem={renderDirectoryItem}
-      keyExtractor={(item) => item.id.toString()}
-    />
+    <SafeAreaView>
+      <FlatList
+        data={campsites}
+        renderItem={renderDirectoryItem}
+        keyExtractor={(item) => item.id.toString()}
+      />
+    </SafeAreaView>
   );
 }
 

@@ -4,6 +4,7 @@ import { Card } from "react-native-elements";
 
 import { useSelector, useDispatch } from "react-redux";
 
+import { baseUrl } from "../shared/baseUrl";
 import { getCampsites } from "../redux/features/campsites/campsitesSlice";
 import { getPartners } from "../redux/features/partners/partnersSlice";
 import { getPromotions } from "../redux/features/promotions/promotionsSlice";
@@ -11,10 +12,17 @@ import { getPromotions } from "../redux/features/promotions/promotionsSlice";
 const RenderItem = ({ item }) => {
   if (item) {
     return (
-      <Card>
-        <Card.Image source={require(`../assets/images/react-lake.jpg`)} />
-        <Card.Title>{item.name}</Card.Title>
-        <Text style={{ margin: 10 }}>{item.description}</Text>
+      <Card containerStyle={{ padding: 0 }}>
+        <Card.Image
+          style={{ justifyContent: "center", alignItems: "center" }}
+          source={{ uri: baseUrl + item.image }}
+        >
+          <Card.FeaturedTitle>{item.name}</Card.FeaturedTitle>
+        </Card.Image>
+
+        <Text style={{ margin: 20, textAlign: "center" }}>
+          {item.description}
+        </Text>
       </Card>
     );
   }

@@ -4,6 +4,7 @@ import { Card, Icon, Rating } from "react-native-elements";
 
 import { useDispatch, useSelector } from "react-redux";
 
+import { baseUrl } from "../shared/baseUrl";
 import { getCampsites } from "../redux/features/campsites/campsitesSlice";
 import { getComments } from "../redux/features/comments/commentsSlice";
 import ReviewForm from "./ReviewForm";
@@ -11,10 +12,16 @@ import ReviewForm from "./ReviewForm";
 function RenderCampsite(props) {
   if (props.campsite) {
     return (
-      <Card>
-        <Card.Image source={require("../assets/images/react-lake.jpg")} />
-        <Card.Title>{props.campsite.name}</Card.Title>
-        <Text style={{ margin: 10 }}>{props.campsite.description}</Text>
+      <Card containerStyle={{ padding: 0 }}>
+        <Card.Image
+          source={{ uri: baseUrl + props.campsite.image }}
+          style={{ justifyContent: "center", alignItems: "center" }}
+        >
+          <Card.FeaturedTitle>{props.campsite.name}</Card.FeaturedTitle>
+        </Card.Image>
+        <Text style={{ marginTop: 20, textAlign: "center" }}>
+          {props.campsite.description}
+        </Text>
         <View style={styles.buttonRow}>
           <Icon
             name={props.favorite ? "heart" : "heart-o"}
@@ -22,11 +29,7 @@ function RenderCampsite(props) {
             color="#F50"
             raised
             reverse
-            onPress={() =>
-              props.favorite
-                ? console.log("Already set as favorite")
-                : props.markFavorite()
-            }
+            onPress={() => props.markFavorite()}
           />
           <ReviewForm selectedCampsite={props.campsite.id} />
         </View>
@@ -43,7 +46,7 @@ function RenderComments({ comments }) {
         <Text style={{ fontSize: 14 }}>{item.text}</Text>
         <Rating
           style={{ alignItems: "left", marginTop: 10, marginBottom: 10 }}
-          readOnly
+          readonly
           imageSize={10}
           startingValue={item.rating}
         />
@@ -82,7 +85,7 @@ function CampsiteInfo({ route }) {
 
   function markFavorite() {
     setData({
-      favorite: true,
+      favorite: !data.favorite,
     });
   }
 

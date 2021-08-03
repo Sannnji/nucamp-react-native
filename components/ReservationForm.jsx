@@ -82,7 +82,7 @@ class Example extends Component {
             onCancel={this.hideDatePicker}
           />
         </View>
-        <Button onPress={() => this.handleSubmit()} title="Search" />
+        <Button onPress={() => this.handleSubmit()} title="Search" style={{width: "50%", alignSelf:"center"}} />
       </ScrollView>
     );
   }
