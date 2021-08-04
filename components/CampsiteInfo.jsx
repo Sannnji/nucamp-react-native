@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, FlatList, StyleSheet } from "react-native";
 import { Card, Icon, Rating } from "react-native-elements";
 
@@ -7,10 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
 import { getCampsites } from "../redux/features/campsites/campsitesSlice";
 import { getComments } from "../redux/features/comments/commentsSlice";
+import { setFavorite } from "../redux/features/favorites/favoriteSlice";
+import { getFavorites } from "../redux/features/favorites/favoriteSlice";
 import ReviewForm from "./ReviewForm";
 
 function RenderCampsite(props) {
-  if (props.campsite) {
+  if (props.campsite && props.favorite) {
     return (
       <Card containerStyle={{ padding: 0 }}>
         <Card.Image
@@ -24,7 +26,7 @@ function RenderCampsite(props) {
         </Text>
         <View style={styles.buttonRow}>
           <Icon
-            name={props.favorite ? "heart" : "heart-o"}
+            name={props.favorite.isFavorite ? "heart" : "heart-o"}
             type="font-awesome"
             color="#F50"
             raised
@@ -69,27 +71,12 @@ function RenderComments({ comments }) {
 }
 
 function CampsiteInfo({ route }) {
-  const dispatch = useDispatch();
+  const { campsiteId } = route.params;
 
   const { comments } = useSelector((state) => state.comments);
   const { campsites } = useSelector((state) => state.campsites);
+  const { favorites } = useSelector((state) => state.favorites);
 
-  useEffect(() => {
-    dispatch(getComments());
-    dispatch(getCampsites());
-  }, [dispatch]);
-
-  const [data, setData] = useState({
-    favorite: false,
-  });
-
-  function markFavorite() {
-    setData({
-      favorite: !data.favorite,
-    });
-  }
-
-  const { campsiteId } = route.params;
   const campsite = campsites.filter(
     (campsite) => campsite.id === campsiteId
   )[0];
@@ -98,11 +85,32 @@ function CampsiteInfo({ route }) {
     (comment) => comment.campsiteId === campsiteId
   );
 
+  const favorite = favorites.filter(
+    (favorite) => favorite.campsiteId === campsiteId
+  )[0];
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getComments());
+    dispatch(getCampsites());
+    dispatch(getFavorites());
+  }, [dispatch]);
+
+  function markFavorite() {
+    dispatch(
+      setFavorite({
+        id: campsiteId,
+        isFavorite: !favorite.isFavorite,
+      }),
+    );
+  }
+
   return (
     <ScrollView>
       <RenderCampsite
         campsite={campsite}
-        favorite={data.favorite}
+        favorite={favorite}
         markFavorite={() => markFavorite()}
       />
       <RenderComments comments={comment} />
