@@ -5,14 +5,12 @@ import { Card, Icon, Rating } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 
 import { baseUrl } from "../shared/baseUrl";
-import { getCampsites } from "../redux/features/campsites/campsitesSlice";
+import { getCampsites, setFavCampsite } from "../redux/features/campsites/campsitesSlice";
 import { getComments } from "../redux/features/comments/commentsSlice";
-import { setFavorite } from "../redux/features/favorites/favoriteSlice";
-import { getFavorites } from "../redux/features/favorites/favoriteSlice";
 import ReviewForm from "./ReviewForm";
 
 function RenderCampsite(props) {
-  if (props.campsite && props.favorite) {
+  if (props.campsite) {
     return (
       <Card containerStyle={{ padding: 0 }}>
         <Card.Image
@@ -26,7 +24,7 @@ function RenderCampsite(props) {
         </Text>
         <View style={styles.buttonRow}>
           <Icon
-            name={props.favorite.isFavorite ? "heart" : "heart-o"}
+            name={props.campsite.isFavorite ? "heart" : "heart-o"}
             type="font-awesome"
             color="#F50"
             raised
@@ -75,7 +73,6 @@ function CampsiteInfo({ route }) {
 
   const { comments } = useSelector((state) => state.comments);
   const { campsites } = useSelector((state) => state.campsites);
-  const { favorites } = useSelector((state) => state.favorites);
 
   const campsite = campsites.filter(
     (campsite) => campsite.id === campsiteId
@@ -85,23 +82,18 @@ function CampsiteInfo({ route }) {
     (comment) => comment.campsiteId === campsiteId
   );
 
-  const favorite = favorites.filter(
-    (favorite) => favorite.campsiteId === campsiteId
-  )[0];
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getComments());
     dispatch(getCampsites());
-    dispatch(getFavorites());
   }, [dispatch]);
 
   function markFavorite() {
     dispatch(
-      setFavorite({
+      setFavCampsite({
         id: campsiteId,
-        isFavorite: !favorite.isFavorite,
+        isFavorite: !campsite.isFavorite,
       }),
     );
   }
@@ -110,7 +102,6 @@ function CampsiteInfo({ route }) {
     <ScrollView>
       <RenderCampsite
         campsite={campsite}
-        favorite={favorite}
         markFavorite={() => markFavorite()}
       />
       <RenderComments comments={comment} />
