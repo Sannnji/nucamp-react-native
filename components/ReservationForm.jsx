@@ -4,7 +4,7 @@ import { Button, Text, Switch, Slider } from "react-native-elements";
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-class Example extends Component {
+class ReservationForm extends Component {
   constructor(props) {
     super(props);
 
@@ -88,7 +88,7 @@ class Example extends Component {
   }
 }
 
-export default Example;
+export default ReservationForm;
 
 const styles = StyleSheet.create({
   formRow: {

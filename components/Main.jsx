@@ -15,7 +15,32 @@ import CampsiteInfo from "./CampsiteInfo";
 import Home from "./Home";
 import Contact from "./Contact";
 import About from "./About";
-import Example from "./ReservationForm";
+import ReservationForm from "./ReservationForm";
+import Favorites from "./Favorites";
+
+const FavoritesNavigator = createStackNavigator();
+
+const FavNav = () => {
+  return (
+    <FavoritesNavigator.Navigator initialRouteName="Favorites">
+      <FavoritesNavigator.Screen
+        name="Favorites"
+        component={Favorites}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <DirectoryNavigator.Screen
+        name="CampsiteInfo"
+        component={CampsiteInfo}
+        options={{
+          headerTintColor: "white",
+          headerStyle: { backgroundColor: "#301B3F" },
+        }}
+      />
+    </FavoritesNavigator.Navigator>
+  );
+};
 
 const DirectoryNavigator = createStackNavigator();
 
@@ -65,6 +90,7 @@ const customDrawerContent = ({ props, ...rest }) => {
 const MyDrawer = () => {
   return (
     <Drawer.Navigator
+      initialRouteName="Home"
       drawerStyle={{ backgroundColor: "#CEC8FF" }}
       drawerContent={customDrawerContent}
     >
@@ -99,12 +125,26 @@ const MyDrawer = () => {
       />
       <Drawer.Screen
         name="Reservation"
-        component={Example}
+        component={ReservationForm}
         options={{
           headerShown: true,
           drawerIcon: () => (
             <Icon
               name="tree"
+              type="font-awesome"
+              iconStyle={styles.drawerIcon}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="My Favorites"
+        component={FavNav}
+        options={{
+          headerShown: true,
+          drawerIcon: () => (
+            <Icon
+              name="heart"
               type="font-awesome"
               iconStyle={styles.drawerIcon}
             />
