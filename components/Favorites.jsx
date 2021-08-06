@@ -3,8 +3,8 @@ import { FlatList, StyleSheet, View, Alert } from "react-native";
 import { ListItem, Avatar, Text } from "react-native-elements";
 import { SwipeRow } from "react-native-swipe-list-view";
 import { TouchableOpacity } from "react-native-gesture-handler";
-
 import { useSelector, useDispatch } from "react-redux";
+import * as Animatable from "react-native-animatable";
 
 import { getCampsites } from "../redux/features/campsites/campsitesSlice";
 import { setFavCampsite } from "../redux/features/campsites/campsitesSlice";
@@ -81,11 +81,13 @@ const Favorites = (props) => {
   };
 
   return (
-    <FlatList
-      data={favCampsites}
-      renderItem={RenderFavorites}
-      keyExtractor={(item) => item.id.toString()}
-    />
+    <Animatable.View animation="fadeInRightBig" duration={2000}>
+      <FlatList
+        data={favCampsites}
+        renderItem={RenderFavorites}
+        keyExtractor={(item) => item.id.toString()}
+      />
+    </Animatable.View>
   );
 };
 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FlatList, StatusBar } from "react-native";
 import { ListItem, Avatar } from "react-native-elements";
-
 import { useSelector, useDispatch } from "react-redux";
+import * as Animatable from "react-native-animatable";
 
 import { baseUrl } from "../shared/baseUrl";
 import { getCampsites } from "../redux/features/campsites/campsitesSlice";
@@ -24,14 +24,16 @@ function Directory(props) {
   const { navigate } = props.navigation;
   const renderDirectoryItem = ({ item }) => {
     return (
-      <Tile
-        featured
-        imageSrc={{ uri: baseUrl + item.image }}
-        title={item.name}
-        caption={item.description}
-        onPress={() => navigate("CampsiteInfo", { campsiteId: item.id })}
-        containerStyle={{ marginTop: 20 }}
-      />
+      <Animatable.View animation="fadeInRightBig" duration={2000} delay={1000}>
+        <Tile
+          featured
+          imageSrc={{ uri: baseUrl + item.image }}
+          title={item.name}
+          caption={item.description}
+          onPress={() => navigate("CampsiteInfo", { campsiteId: item.id })}
+          containerStyle={{ marginTop: 20 }}
+        />
+      </Animatable.View>
     );
   };
 

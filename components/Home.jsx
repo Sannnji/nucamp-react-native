@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { ScrollView, Text, View, Animated } from "react-native";
 import { Card } from "react-native-elements";
-
 import { useSelector, useDispatch } from "react-redux";
+import * as Animatable from "react-native-animatable";
 
 import { baseUrl } from "../shared/baseUrl";
 import { getCampsites } from "../redux/features/campsites/campsitesSlice";
@@ -54,13 +54,17 @@ const Home = () => {
   };
 
   return (
-    <Animated.ScrollView style={{ transform: [{ scale: springAnim }] }}>
-      <RenderItem item={campsites.filter((campsite) => campsite.featured)[0]} />
-      <RenderItem
-        item={promotions.filter((promotion) => promotion.featured)[0]}
-      />
-      <RenderItem item={partners.filter((partner) => partner.featured)[0]} />
-    </Animated.ScrollView>
+    <ScrollView>
+      <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+        <RenderItem
+          item={campsites.filter((campsite) => campsite.featured)[0]}
+        />
+        <RenderItem
+          item={promotions.filter((promotion) => promotion.featured)[0]}
+        />
+        <RenderItem item={partners.filter((partner) => partner.featured)[0]} />
+      </Animatable.View>
+    </ScrollView>
   );
 };
 

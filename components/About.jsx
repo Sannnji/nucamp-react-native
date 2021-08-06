@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { ScrollView, FlatList } from "react-native";
+import { ScrollView, FlatList, View } from "react-native";
 import { Text, Card, ListItem, Avatar } from "react-native-elements";
-
 import { useSelector, useDispatch } from "react-redux";
+import * as Animatable from "react-native-animatable";
 
 import { getPartners } from "../redux/features/partners/partnersSlice";
 import { baseUrl } from "../shared/baseUrl";
@@ -47,16 +47,18 @@ const About = (props) => {
 
   return (
     <ScrollView>
-      <Mission />
-      <Card wrapperStyle={{ margin: 10 }}>
-        <Card.Title>Community Partners</Card.Title>
-        <Card.Divider />
-        <FlatList
-          data={partners}
-          renderItem={renderPartners}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      </Card>
+      <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+        <Mission />
+        <Card wrapperStyle={{ margin: 10 }}>
+          <Card.Title>Community Partners</Card.Title>
+          <Card.Divider />
+          <FlatList
+            data={partners}
+            renderItem={renderPartners}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        </Card>
+      </Animatable.View>
     </ScrollView>
   );
 };

@@ -1,39 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, FlatList, StyleSheet } from "react-native";
 import { Card, Icon, Rating } from "react-native-elements";
-
 import { useDispatch, useSelector } from "react-redux";
+import * as Animatable from "react-native-animatable";
 
 import { baseUrl } from "../shared/baseUrl";
-import { getCampsites, setFavCampsite } from "../redux/features/campsites/campsitesSlice";
+import {
+  getCampsites,
+  setFavCampsite,
+} from "../redux/features/campsites/campsitesSlice";
 import { getComments } from "../redux/features/comments/commentsSlice";
 import ReviewForm from "./ReviewForm";
 
 function RenderCampsite(props) {
   if (props.campsite) {
     return (
-      <Card containerStyle={{ padding: 0 }}>
-        <Card.Image
-          source={{ uri: baseUrl + props.campsite.image }}
-          style={{ justifyContent: "center", alignItems: "center" }}
-        >
-          <Card.FeaturedTitle>{props.campsite.name}</Card.FeaturedTitle>
-        </Card.Image>
-        <Text style={{ marginTop: 20, textAlign: "center" }}>
-          {props.campsite.description}
-        </Text>
-        <View style={styles.buttonRow}>
-          <Icon
-            name={props.campsite.isFavorite ? "heart" : "heart-o"}
-            type="font-awesome"
-            color="#F50"
-            raised
-            reverse
-            onPress={() => props.markFavorite()}
-          />
-          <ReviewForm selectedCampsite={props.campsite.id} />
-        </View>
-      </Card>
+      <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+        <Card containerStyle={{ padding: 0 }}>
+          <Card.Image
+            source={{ uri: baseUrl + props.campsite.image }}
+            style={{ justifyContent: "center", alignItems: "center" }}
+          >
+            <Card.FeaturedTitle>{props.campsite.name}</Card.FeaturedTitle>
+          </Card.Image>
+          <Text style={{ marginTop: 20, textAlign: "center" }}>
+            {props.campsite.description}
+          </Text>
+          <View style={styles.buttonRow}>
+            <Icon
+              name={props.campsite.isFavorite ? "heart" : "heart-o"}
+              type="font-awesome"
+              color="#F50"
+              raised
+              reverse
+              onPress={() => props.markFavorite()}
+            />
+            <ReviewForm selectedCampsite={props.campsite.id} />
+          </View>
+        </Card>
+      </Animatable.View>
     );
   }
   return <View />;
@@ -58,13 +63,15 @@ function RenderComments({ comments }) {
   };
 
   return (
-    <Card title="Comments">
-      <FlatList
-        data={comments}
-        renderItem={renderCommentItem}
-        keyExtractor={(item) => item.id.toString()}
-      />
-    </Card>
+    <Animatable.View animation="fadeInDown" duration={2000} delay={2000}>
+      <Card title="Comments">
+        <FlatList
+          data={comments}
+          renderItem={renderCommentItem}
+          keyExtractor={(item) => item.id.toString()}
+        />
+      </Card>
+    </Animatable.View>
   );
 }
 
@@ -94,16 +101,13 @@ function CampsiteInfo({ route }) {
       setFavCampsite({
         id: campsiteId,
         isFavorite: !campsite.isFavorite,
-      }),
+      })
     );
   }
 
   return (
     <ScrollView>
-      <RenderCampsite
-        campsite={campsite}
-        markFavorite={() => markFavorite()}
-      />
+      <RenderCampsite campsite={campsite} markFavorite={() => markFavorite()} />
       <RenderComments comments={comment} />
     </ScrollView>
   );
