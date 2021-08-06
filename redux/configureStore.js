@@ -4,7 +4,6 @@ import campsitesReducer from "./features/campsites/campsitesSlice";
 import partnersReducer from "./features/partners/partnersSlice";
 import promotionsReducer from "./features/promotions/promotionsSlice";
 import commentsReducer from "./features/comments/commentsSlice";
-import favoriteReducer from "./features/favorites/favoriteSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,7 +11,6 @@ const store = configureStore({
     partners: partnersReducer,
     promotions: promotionsReducer,
     comments: commentsReducer,
-    favorites: favoriteReducer,
   },
 });
 
