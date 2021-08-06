@@ -1,5 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, FlatList, StyleSheet } from "react-native";
+import React, { useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  FlatList,
+  StyleSheet,
+  PanResponder,
+  Alert,
+} from "react-native";
 import { Card, Icon, Rating } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import * as Animatable from "react-native-animatable";
@@ -13,29 +21,67 @@ import { getComments } from "../redux/features/comments/commentsSlice";
 import ReviewForm from "./ReviewForm";
 
 function RenderCampsite(props) {
+  const { campsite } = props;
+
+  const recognizeDrag = ({ dx }) => (dx < -200 ? true : false);
+
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderEnd: (e, gestureState) => {
+      console.log("pan responder has ended", gestureState);
+      if (recognizeDrag(gestureState)) {
+        Alert.alert(
+          "Add Favorite",
+          "Are you sure you wish to add" + campsite.name + " to favorites?",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+              onPress: () => console.log("Cancel Pressed"),
+            },
+            {
+              text: "OK",
+              onPress: () =>
+                props.isFavorite
+                  ? console.log("unSetting favorite")
+                  : console.log("setting favorite"),
+            },
+          ],
+          { cancelable: false }
+        );
+      }
+      return true;
+    },
+  });
+
   if (props.campsite) {
     return (
-      <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+      <Animatable.View
+        animation="fadeInDown"
+        duration={2000}
+        delay={1000}
+        {...panResponder.panHandlers}
+      >
         <Card containerStyle={{ padding: 0 }}>
           <Card.Image
-            source={{ uri: baseUrl + props.campsite.image }}
+            source={{ uri: baseUrl + campsite.image }}
             style={{ justifyContent: "center", alignItems: "center" }}
           >
-            <Card.FeaturedTitle>{props.campsite.name}</Card.FeaturedTitle>
+            <Card.FeaturedTitle>{campsite.name}</Card.FeaturedTitle>
           </Card.Image>
           <Text style={{ marginTop: 20, textAlign: "center" }}>
-            {props.campsite.description}
+            {campsite.description}
           </Text>
           <View style={styles.buttonRow}>
             <Icon
-              name={props.campsite.isFavorite ? "heart" : "heart-o"}
+              name={campsite.isFavorite ? "heart" : "heart-o"}
               type="font-awesome"
               color="#F50"
               raised
               reverse
               onPress={() => props.markFavorite()}
             />
-            <ReviewForm selectedCampsite={props.campsite.id} />
+            <ReviewForm selectedCampsite={campsite.id} />
           </View>
         </Card>
       </Animatable.View>
