@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { ScrollView, Text, View } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { ScrollView, Text, View, Animated } from "react-native";
 import { Card } from "react-native-elements";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -8,6 +8,7 @@ import { baseUrl } from "../shared/baseUrl";
 import { getCampsites } from "../redux/features/campsites/campsitesSlice";
 import { getPartners } from "../redux/features/partners/partnersSlice";
 import { getPromotions } from "../redux/features/promotions/promotionsSlice";
+import Loading from "./Loading";
 
 const RenderItem = ({ item }) => {
   if (item) {
@@ -39,16 +40,27 @@ const Home = () => {
     dispatch(getCampsites());
     dispatch(getPartners());
     dispatch(getPromotions());
+    springIn();
   }, []);
 
+  const springAnim = useRef(new Animated.Value(0)).current;
+
+  const springIn = () => {
+    Animated.timing(springAnim, {
+      toValue: 1,
+      duration: 3000,
+      useNativeDriver: true,
+    }).start();
+  };
+
   return (
-    <ScrollView>
+    <Animated.ScrollView style={{ transform: [{ scale: springAnim }] }}>
       <RenderItem item={campsites.filter((campsite) => campsite.featured)[0]} />
       <RenderItem
         item={promotions.filter((promotion) => promotion.featured)[0]}
       />
       <RenderItem item={partners.filter((partner) => partner.featured)[0]} />
-    </ScrollView>
+    </Animated.ScrollView>
   );
 };
 
