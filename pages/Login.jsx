@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { Input, CheckBox, Button } from "react-native-elements";
 import * as SecureStore from "expo-secure-store";
@@ -19,6 +19,19 @@ const Login = () => {
     remember: false,
   });
 
+  useEffect(() => {
+    SecureStore.getItemAsync("userinfo").then((userdata) => {
+      const userinfo = JSON.parse(userdata);
+      if (userinfo) {
+        setData({
+          username: userinfo.username,
+          password: userinfo.password,
+          remember: userinfo.remember,
+        });
+      }
+    });
+  });
+
   const handleLogin = () => {
     console.log(JSON.stringify(data));
 
@@ -28,6 +41,7 @@ const Login = () => {
         JSON.stringify({
           username: data.username,
           password: data.password,
+          remember: data.remember,
         })
       ).catch((error) => console.log("Could not save user info", error));
     } else {
@@ -49,6 +63,7 @@ const Login = () => {
             remember: data.remember,
           })
         }
+        value={data.username}
         containerStyle={styles.formInput}
         leftIconContainerStyle={styles.formIcon}
       />
@@ -62,6 +77,7 @@ const Login = () => {
             remember: data.remember,
           })
         }
+        value={data.password}
         containerStyle={styles.formInput}
         leftIconContainerStyle={styles.formIcon}
       />
