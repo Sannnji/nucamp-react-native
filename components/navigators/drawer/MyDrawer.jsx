@@ -9,6 +9,7 @@ import {
 
 import FavoriteStack from "../stacks/FavoriteStack";
 import DirectoryStack from "../stacks/DirectoryStack";
+import Login from "../../../pages/Login";
 import Home from "../../../pages/Home";
 import Contact from "../../../pages/Contact";
 import About from "../../../pages/About";
@@ -42,6 +43,21 @@ const MyDrawer = () => {
       drawerStyle={{ backgroundColor: "#CEC8FF" }}
       drawerContent={customDrawerContent}
     >
+      <Drawer.Screen
+        name="Login"
+        component={Login}
+        options={{
+          headerShown: true,
+          headerTitle: "Login",
+          drawerIcon: () => (
+            <Icon
+              name="sign-in"
+              type="font-awesome"
+              iconStyle={styles.drawerIcon}
+            />
+          ),
+        }}
+      />
       <Drawer.Screen
         name="Home"
         component={Home}
