@@ -8,7 +8,7 @@ import { baseUrl } from "../shared/baseUrl";
 import { getCampsites } from "../redux/features/campsites/campsitesSlice";
 import { getPartners } from "../redux/features/partners/partnersSlice";
 import { getPromotions } from "../redux/features/promotions/promotionsSlice";
-import Loading from "./Loading";
+import Loading from "../components/Loading";
 
 const RenderItem = ({ item }) => {
   if (item) {

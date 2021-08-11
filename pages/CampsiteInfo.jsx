@@ -1,14 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
-  Text,
   ScrollView,
   FlatList,
   StyleSheet,
   PanResponder,
   Alert,
 } from "react-native";
-import { Card, Icon, Rating } from "react-native-elements";
+import { Card, Icon, Rating, Text } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import * as Animatable from "react-native-animatable";
 
@@ -18,14 +17,21 @@ import {
   setFavCampsite,
 } from "../redux/features/campsites/campsitesSlice";
 import { getComments } from "../redux/features/comments/commentsSlice";
-import ReviewForm from "./ReviewForm";
+import ReviewForm from "../components/ReviewForm";
 
 function RenderCampsite(props) {
+  const [visible, setVisible] = useState(false);
+
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
+
   const { campsite } = props;
 
   const view = React.createRef();
 
-  const recognizeDrag = ({ dx }) => (dx < -200 ? true : false);
+  const favoriteDrag = ({ dx }) => (dx < -200 ? true : false);
+  const reviewDrag = ({ dx }) => (dx > 200 ? true : false);
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -38,7 +44,10 @@ function RenderCampsite(props) {
     },
     onPanResponderEnd: (e, gestureState) => {
       console.log("pan responder has ended", gestureState);
-      if (recognizeDrag(gestureState)) {
+      if (reviewDrag(gestureState)) {
+        toggleOverlay();
+      }
+      if (favoriteDrag(gestureState)) {
         Alert.alert(
           "Add Favorite",
           "Are you sure you wish to add" + campsite.name + " to favorites?",
@@ -91,7 +100,11 @@ function RenderCampsite(props) {
               reverse
               onPress={() => props.markFavorite()}
             />
-            <ReviewForm selectedCampsite={campsite.id} />
+            <ReviewForm
+              selectedCampsite={campsite.id}
+              toggleOverlay={toggleOverlay}
+              isVisible={visible}
+            />
           </View>
         </Card>
       </Animatable.View>

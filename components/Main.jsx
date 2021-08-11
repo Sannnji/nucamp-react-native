@@ -10,13 +10,13 @@ import {
 } from "@react-navigation/drawer";
 import Constants from "expo-constants";
 
-import Directory from "./Directory";
-import CampsiteInfo from "./CampsiteInfo";
-import Home from "./Home";
-import Contact from "./Contact";
-import About from "./About";
-import ReservationForm from "./ReservationForm";
-import Favorites from "./Favorites";
+import Directory from "../pages/Directory";
+import CampsiteInfo from "../pages/CampsiteInfo";
+import Home from "../pages/Home";
+import Contact from "../pages/Contact";
+import About from "../pages/About";
+import ReservationForm from "../pages/Reservation";
+import Favorites from "../pages/Favorites";
 
 const FavoritesNavigator = createStackNavigator();
 
@@ -46,7 +46,10 @@ const DirectoryNavigator = createStackNavigator();
 
 const MyStack = () => {
   return (
-    <DirectoryNavigator.Navigator initialRouteName="Directory">
+    <DirectoryNavigator.Navigator
+      initialRouteName="Directory"
+      screenOptions={{ gestureEnabled: false }}
+    >
       <DirectoryNavigator.Screen
         name="Directory"
         component={Directory}

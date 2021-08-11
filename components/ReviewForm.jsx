@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import {
   Overlay,
-  Text,
   Icon,
   Rating,
   Input,
@@ -15,7 +14,7 @@ import { addComment } from "../redux/features/comments/commentsSlice";
 const ReviewOverlay = (props) => {
   const dispatch = useDispatch();
 
-  const [visible, setVisible] = useState(false);
+  
   const [comment, setComment] = useState({
     campsiteId: props.selectedCampsite,
     rating: "5",
@@ -23,10 +22,6 @@ const ReviewOverlay = (props) => {
     text: "",
     date: "",
   });
-
-  const toggleOverlay = () => {
-    setVisible(!visible);
-  };
 
   const handleSubmit = () => {
     dispatch(
@@ -38,7 +33,7 @@ const ReviewOverlay = (props) => {
         date: new Date().toISOString(),
       })
     );
-    toggleOverlay();
+    props.toggleOverlay();
   };
 
   return (
@@ -49,12 +44,12 @@ const ReviewOverlay = (props) => {
         color="#5637DD"
         raised
         reverse
-        onPress={toggleOverlay}
+        onPress={props.toggleOverlay}
       />
 
       <Overlay
-        isVisible={visible}
-        onBackdropPress={toggleOverlay}
+        isVisible={props.isVisible}
+        onBackdropPress={props.toggleOverlay}
         overlayStyle={{ width: "95%" }}
       >
         <View style={styles.overlay}>
@@ -102,7 +97,7 @@ const ReviewOverlay = (props) => {
               handleSubmit();
             }}
           />
-          <Button title="CANCEL" onPress={toggleOverlay} />
+          <Button title="CANCEL" onPress={props.toggleOverlay} />
         </View>
       </Overlay>
     </View>
