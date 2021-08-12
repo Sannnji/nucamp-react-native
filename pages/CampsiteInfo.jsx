@@ -6,6 +6,7 @@ import {
   StyleSheet,
   PanResponder,
   Alert,
+  Share,
 } from "react-native";
 import { Card, Icon, Rating, Text } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +19,19 @@ import {
 } from "../redux/features/campsites/campsitesSlice";
 import { getComments } from "../redux/features/comments/commentsSlice";
 import ReviewForm from "../components/ReviewForm";
+
+const shareCampsite = (title, message, url) => {
+  Share.share(
+    {
+      title: title,
+      message: `${title}: ${message} ${url}`,
+      url: url,
+    },
+    {
+      dialogTitle: "Share " + title,
+    }
+  );
+};
 
 function RenderCampsite(props) {
   const [visible, setVisible] = useState(false);
@@ -104,6 +118,20 @@ function RenderCampsite(props) {
               selectedCampsite={campsite.id}
               toggleOverlay={toggleOverlay}
               isVisible={visible}
+            />
+            <Icon
+              name="share"
+              type="font-awesome"
+              color="#5637DD"
+              rraised
+              reverse
+              onPress={() => {
+                shareCampsite(
+                  campsite.name,
+                  campsite.description,
+                  baseUrl + campsite.image
+                );
+              }}
             />
           </View>
         </Card>
