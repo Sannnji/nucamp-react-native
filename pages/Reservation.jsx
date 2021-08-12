@@ -1,10 +1,10 @@
-import React, { useState, Component } from "react";
+import React, { Component } from "react";
 import { View, StyleSheet, ScrollView, Alert } from "react-native";
 import { Button, Text, Switch, Slider } from "react-native-elements";
 import * as Animatable from "react-native-animatable";
+import * as Notifications from "expo-notifications";
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import Animated from "react-native-reanimated";
 
 class ReservationForm extends Component {
   constructor(props) {
@@ -18,6 +18,14 @@ class ReservationForm extends Component {
       isDatePickerVisible: false,
     };
   }
+
+  resetForm = () => {
+    this.setState({
+      campers: 1,
+      hikeIn: false,
+      date: "",
+    });
+  };
 
   showDatePicker = () => {
     this.setState({ isDatePickerVisible: true });
@@ -36,10 +44,50 @@ class ReservationForm extends Component {
   handleSubmit = () => {
     Alert.alert(
       "Begin Search?",
-      `Number of Campers ${this.state.campers} \n Hike-in ${this.state.hikeIn} \n Date: ${this.state.date}`
+      `Number of Campers ${this.state.campers} \n Hike-in ${this.state.hikeIn} \n Date: ${this.state.date}`,
+      [
+        {
+          text: "Cancel",
+          onPress: () => resetForm(),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => {
+            this.presentLocalNotification(this.state.date);
+            this.resetForm();
+          },
+        },
+      ]
     );
     console.warn(this.state);
   };
+
+  async presentLocalNotification(date) {
+    function sendNotification() {
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldShowAlert: true,
+        }),
+      });
+
+      Notifications.scheduleNotificationAsync({
+        content: {
+          title: "Your Campsite Reservation Search",
+          body: `Search for ${date} requested`,
+        },
+        trigger: null,
+      });
+    }
+
+    let permissions = await Notifications.getPermissionsAsync();
+    if (!permissions.granted) {
+      permissions = await Notifications.requestPermissionsAsync();
+    }
+    if (permissions.granted) {
+      sendNotification();
+    }
+  }
 
   render() {
     return (
