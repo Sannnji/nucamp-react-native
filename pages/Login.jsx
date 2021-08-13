@@ -30,7 +30,7 @@ const Login = () => {
         });
       }
     });
-  });
+  }, []);
 
   const handleLogin = () => {
     console.log(JSON.stringify(data));
@@ -57,10 +57,8 @@ const Login = () => {
         placeholder="Username"
         leftIcon={{ type: "font-awesome", name: "user-o" }}
         onChangeText={(value) =>
-          setData({
-            username: value,
-            password: data.password,
-            remember: data.remember,
+          setData((prevData) => {
+            return { ...prevData, username: value };
           })
         }
         value={data.username}
@@ -71,10 +69,8 @@ const Login = () => {
         placeholder="Password"
         leftIcon={{ type: "font-awesome", name: "key" }}
         onChangeText={(value) =>
-          setData({
-            username: data.username,
-            password: value,
-            remember: data.remember,
+          setData((prevData) => {
+            return { ...prevData, password: value };
           })
         }
         value={data.password}
@@ -86,10 +82,8 @@ const Login = () => {
         center
         checked={data.remember}
         onPress={() =>
-          setData({
-            username: data.username,
-            password: data.password,
-            remember: !data.remember,
+          setData((prevData) => {
+            return { ...prevData, remember: !data.remember };
           })
         }
         containerStyle={styles.formCheckbox}
