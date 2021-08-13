@@ -9,9 +9,7 @@ import { persistor } from "./redux/configureStore";
 export default function App() {
   return (
     <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <Main />
-      </PersistGate>
+      <Main />
     </Provider>
   );
 }

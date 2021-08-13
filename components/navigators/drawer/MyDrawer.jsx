@@ -7,6 +7,7 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 
+import MyBottomTab from "../bottomTab/MyBottomTab";
 import FavoriteStack from "../stacks/FavoriteStack";
 import DirectoryStack from "../stacks/DirectoryStack";
 import Login from "../../../pages/Login";
@@ -45,7 +46,7 @@ const MyDrawer = () => {
     >
       <Drawer.Screen
         name="Login"
-        component={Login}
+        component={MyBottomTab}
         options={{
           headerShown: true,
           headerTitle: "Login",
