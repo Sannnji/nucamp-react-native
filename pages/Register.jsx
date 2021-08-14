@@ -4,6 +4,7 @@ import { Input, Button, Image } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import * as SecureStore from "expo-secure-store";
+import * as ImageManipulator from "expo-image-manipulator";
 
 import { baseUrl } from "../shared/baseUrl";
 
@@ -28,25 +29,51 @@ const Register = () => {
 
   const getImageFromCamera = async () => {
     const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);
-    const cameraRollPermission = await Permissions.askAsync(
-      Permissions.MEDIA_LIBRARY
-    );
 
-    if (
-      cameraPermission.status === "granted" &&
-      cameraRollPermission.status === "granted"
-    ) {
+    if (cameraPermission.status === "granted") {
       const capturedImage = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
         aspect: [1, 1],
       });
       if (!capturedImage.cancelled) {
         console.log(capturedImage);
-        setData({
-          image: capturedImage.uri,
-        });
+        processImage(capturedImage.uri);
       }
     }
+  };
+
+  const getImageFromGallery = async () => {
+    const cameraRollPermission = await Permissions.askAsync(
+      Permissions.MEDIA_LIBRARY
+    );
+
+    if (cameraRollPermission.status === "granted") {
+      const galleryImage = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [1, 1],
+      });
+      if (!galleryImage.cancelled) {
+        processImage(galleryImage.uri);
+      }
+    }
+  };
+
+  const processImage = async (imageUrl) => {
+    const manipResult = await ImageManipulator.manipulateAsync(
+      imageUrl,
+      [
+        { resize: { height: 400, width: 400 } },
+        // { crop: { originX: 400, originY: 400, height: 400, width: 400 } },
+      ],
+      { compress: 1, format: ImageManipulator.SaveFormat.PNG }
+    );
+    console.log(manipResult);
+    setData((...prevData) => {
+      return {
+        ...prevData,
+        image: manipResult.uri,
+      };
+    });
   };
 
   return (
@@ -59,6 +86,7 @@ const Register = () => {
             style={styles.image}
           />
           <Button title="Camera" onPress={getImageFromCamera} />
+          <Button title="Gallery" onPress={getImageFromGallery} />
         </View>
 
         <Input
